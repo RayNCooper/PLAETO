@@ -2,8 +2,6 @@
 ## Introduction
 > “How could they see anything but the shadows if they were never allowed to move their heads?”
 
-
-
 This repository contains the source for an implementation of a bachelor's thesis at the NES chair of the Duisburg-Essen University.
 
 The repository's name is inspired from the parent project [SOCRAETES](https://github.com/SepehrMosavat/SOCRAETES), which provides an API for benchmarking bateryless sensor node energy harvesting data as well as relevant environmental parameters.
@@ -20,4 +18,4 @@ In order to enable organized development, the whole process will be described in
 ## Documents
 
 - [User Stories](user_stories.md)
-- [Abstract](abstract.md)
+- [Abstract](abstract.pdf)
