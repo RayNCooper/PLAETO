@@ -17,5 +17,5 @@ In order to enable organized development, the whole process will be described in
 
 ## Documents
 
-- [User Stories](user_stories.md)
+- [User Stories & Requirements](user_stories.md)
 - [Abstract](abstract.pdf)
