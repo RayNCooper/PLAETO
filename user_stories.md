@@ -34,7 +34,7 @@ As soon as there are enough User Stories, various requirements can be deduced:
 
 - Users need to be able to transmit their data to the remote backend
   - This procedure is ideally performed by transmitting sensor node data to the remote endpoint via an USB connection to a general computing device
-    - Node -> (USB) -> Computing device -> (Network) -> Remote
+    - Batteryless Sensor Node -> (USB) -> General Computing device -> (Network) -> Remote
 - The means of transmission should include the following, starting off with the most important:
   1. via _Socket_
   2. via _HTTP_
