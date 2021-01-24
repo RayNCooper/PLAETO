@@ -32,46 +32,47 @@ As soon as there are enough User Stories, various requirements can be deduced:
 
 #### ❌ Transmission of data ❌
 
-- Users need to be able to transmit their data to the remote backend
+- ❌ Users need to be able to transmit their data to the remote backend
   - This procedure is ideally performed by transmitting sensor node data to the remote endpoint via an USB connection to a general computing device
     - Batteryless Sensor Node -> (USB) -> General Computing device -> (Network) -> Remote
-- The means of transmission should include the following, starting off with the most important:
+- ❌ The means of transmission should include the following, starting off with the most important:
   1. via _Socket_
   2. via _HTTP_
-- If one kind of transmission fails, the other should be tried in order to guarantee reception of data
+- ❌ If one kind of transmission fails, the other should be tried in order to guarantee reception of data
   - If there is no Internet connection available to the transmitting device, the program should log a _warning_ and save all recorded data to a file
 
 #### ❌ Data format, Metadata ❌
 
-- In order to guarantee data integrity, the format/schema for all data should be pre-defined
-  - The general data format (used in file import/export, network transmission) for this project is [HDF5](https://www.hdfgroup.org/solutions/hdf5)
-- Users should be able to add metadata such as temperature or time of day to their data in order to enable categorization
+- ❌ In order to guarantee data integrity, the format/schema for all data should be standardized
+  - The data format used in network transmission is [JSON](https://www.json.org/json-en.html)
+  - The data format for direct node-to-disk commitment is [HDF5](https://www.hdfgroup.org/solutions/hdf5)
+- ❌ Users should be able to add metadata such as temperature or time of day to their data in order to enable categorization
 
 ### In the browser (WebApp, Frontend)
 
 #### ❌ Visualization of Data ❌
 
-- Users should be able to visualize their stored data
+- ❌ Users should be able to visualize their stored data
   - There should be various options of charts and graphs for Users to choose from (both 2D and 3D)
-- Users should be able to compare their stored data
+- ❌ Users should be able to compare their stored data
   - Datasets should be comparable by giving side-by-side comparisons as well as by superimposing data in one chart
-- Users should be able to observe incoming data in real-time if possible
+- ❌ Users should be able to observe incoming data in real-time if possible
   - If there is a socket connection to the project's backend, Users should be able to keep track of incoming data by receiving real-time updates relayed through the backend server
 
 #### ❌ Data analysis ❌
 
-- Users should be able to analyze their stored data
+- ❌ Users should be able to analyze their stored data
   - To give Users a chance to coarsely analyze their data, there should be several options for treating displayed data (e.g. interpolation)
 
 ### Backend (Remote)
 
 #### ❌ API ❌
 
-- The backend should offer an API in order to receive energy harvesting node data
+- ❌ The backend should offer an API in order to receive energy harvesting node data
   - There should be both an API for _HTTP_ as well as for _Sockets_
 
 #### ❌ File import & export ❌
 
-- The backend should offer a way to import and export data in the HDF5 file format
+- ❌ The backend should offer a way to import and export data in the HDF5 file format
   - If an uploaded file has a wrong file extension or schema, it should be rejected and an error should be displayed to the User via the frontend
   - Data can be exported and downloaded in the HDF5 file format
