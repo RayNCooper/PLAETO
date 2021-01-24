@@ -4,3 +4,4 @@ django-filer>=2.0,<2.1
 python-socketio>=4.6,<4.7
 eventlet>=0.30,<0.31
 gunicorn>=20.0,<21.0
+coloredlogs>=15.0,<16.0
