@@ -12,7 +12,7 @@ Although Users possess the ability to use the WebApp with all its features, they
 
 Since Users do not have access to the core workings of the backend (such as management of all stored data), the WebApp needs to offer a Toolkit to Users that satisfies their needs.
 
-## On-device (energy harvesting sensor node used, built on SOCRAETES)
+## On-device (energy harvester recorder used, built on SOCRAETES)
 
 - “As a User, I want to be able to record energy harvesting data from an embedded device.”
 - “As a User, I want to be able to store my recorded data remotely.”
@@ -28,16 +28,16 @@ Since Users do not have access to the core workings of the backend (such as mana
 
 As soon as there are enough User Stories, various requirements can be deduced:
 
-### On-device (energy harvesting sensor node used, built on SOCRAETES)
+### On-device (energy harvester recorder used, built on SOCRAETES)
 
 #### ❌ Transmission of data ❌
 
 - ❌ Users need to be able to transmit their data to the remote backend
-  - This procedure is ideally performed by transmitting sensor node data to the remote endpoint via an USB connection to a general computing device
-    - Batteryless Sensor Node -> (USB) -> General Computing device -> (Network) -> Remote
+  - This procedure is ideally performed by transmitting recorder data to the remote endpoint via an USB connection to a general computing device
+    - Energy Harvester Recorder -> (USB) -> General Computing device -> (Network) -> Remote
 - ❌ The means of transmission should include the following, starting off with the most important:
-  1. via _Socket_
-  2. via _HTTP_
+  1. via _Socket_ (Realtime - **JSON** format)
+  2. via _HTTP_ (Fallback for Socket Connection, Locally Recorded Trace imported - **HDF5** format)
 - ❌ If one kind of transmission fails, the other should be tried in order to guarantee reception of data
   - If there is no Internet connection available to the transmitting device, the program should log a _warning_ and save all recorded data to a file
 
@@ -45,7 +45,10 @@ As soon as there are enough User Stories, various requirements can be deduced:
 
 - ❌ In order to guarantee data integrity, the format/schema for all data should be standardized
   - The data format used in network transmission is [JSON](https://www.json.org/json-en.html)
-  - The data format for direct node-to-disk commitment is [HDF5](https://www.hdfgroup.org/solutions/hdf5)
+  - The data format for direct node-to-disk commitment, file import/export is [HDF5](https://www.hdfgroup.org/solutions/hdf5)
+      - On file import (upload), data is parsed for persistence from **HDF5** to **JSON** 
+      - On file export (download), data is parsed from persisted **JSON** to **HDF5**
+      - **CAUTION:** How does the system handle large datasets (>=1GB)?
 - ❌ Users should be able to add metadata such as temperature or time of day to their data in order to enable categorization
 
 ### In the browser (WebApp, Frontend)
