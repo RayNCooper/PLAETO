@@ -7,7 +7,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import VueSocketIO from "vue-socket.io";
 import { CurvePoint, CurveData } from "@/types/CurvePoints";
-import ReactiveChart from "./charts/ReactiveChart.vue";
+import ReactiveChart from "@/components/stream-panel/chart/ReactiveChart.vue";
 
 @Component({
   components: { ReactiveChart },
@@ -22,7 +22,7 @@ import ReactiveChart from "./charts/ReactiveChart.vue";
     }
   }
 })
-export default class HelloWorld extends Vue {
+export default class ReactiveChartHolder extends Vue {
   @Prop() private msg!: string;
 
   x: number[] = [];
@@ -30,44 +30,37 @@ export default class HelloWorld extends Vue {
   curveNumber = 0;
 
   get chart() {
-    const chart = {
-      uuid: "123",
+    return {
+      uuid: "chart1",
       traces: [
         {
-          x: this.getX,
-          y: this.getY,
+          x: this.x,
+          y: this.y,
           mode: "lines+markers",
           line: { shape: "spline", smoothing: 1.3 },
-          type: "scatter"
+          type: "scatter",
+          fill: "tozeroy"
         }
       ],
-      layout: this.getPlotLayout
+      layout: this.plotLayout
     };
-    return chart;
   }
 
-  get getX() {
-    return this.x;
+  get title() {
+    return "Curves Plotted: " + this.curveNumber;
   }
 
-  get getY() {
-    return this.y;
-  }
-
-  get getTitle() {
-    const title = "Curves Plotted: " + this.curveNumber;
-    return title;
-  }
-
-  get getPlotLayout() {
+  get plotLayout() {
     return {
-      title: this.getTitle,
+      title: this.title,
       xaxis: {
+        /* range: [0, 2.7], */
         title: {
           text: "Solar Cell Voltage (V)"
         }
       },
       yaxis: {
+        /* range: [0, 400], */
         title: {
           text: "Solar Cell Current (μA)"
         }
@@ -84,10 +77,9 @@ export default class HelloWorld extends Vue {
       this.$set(this.$data, "y", []);
 
       const parsedCurves: CurveData = JSON.parse(data);
+      console.log(this.chart.traces);
 
       this.curveNumber++;
-      /* this.$set(this.$data, "curveNumber", parsedCurves.curveNumber); */
-
       this.setPlotData(parsedCurves.curvePoints);
     });
   }
