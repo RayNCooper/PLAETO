@@ -1,13 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-app-bar app color="white" flat>
-      <!-- <v-avatar
-        :color="$vuetify.breakpoint.smAndDown ? 'grey darken-1' : 'transparent'"
-        size="32"
-      ></v-avatar> -->
-      <v-app-bar-title class="plaeto-font">
-        PLAETO
-      </v-app-bar-title>
+      <span class="plaeto-font">PLÆTO</span>
 
       <v-tabs centered class="ml-n9">
         <v-tab

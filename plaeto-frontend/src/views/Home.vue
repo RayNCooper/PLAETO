@@ -11,24 +11,24 @@
                 :padding="10"
                 color="white"
                 :line-width="2"
-                :stroke-linecap="round"
-                :gradient-direction="top"
                 :fill="false"
-                :type="trend"
                 :auto-line-width="false"
                 auto-draw
               ></v-sparkline>
             </v-card>
 
             <v-card-text>
-              <p class="text-h5 text--primary">
+              <p class="text-h6 text--primary">
                 <b class="plaeto-font">PLAETO</b> (/ˈpleɪtoʊ/)
               </p>
               <p>
                 A proof of concept software suite for benchmarking and analysing
                 energy-harvesting systems. <br />
                 This project is being developed in the context of a bachelor's
-                thesis at University of Duisburg-Essen.
+                thesis at University of Duisburg-Essen. <br />
+                Named after the greek philosopher Plato, this project builds
+                upon a frontend for energy harvesting recorder devices called
+                SOCRAETES and thus found its name.
               </p>
               <div class="text--primary"></div>
             </v-card-text>
