@@ -13,13 +13,14 @@ Vue.use(
     vuex: {
       store,
       actionPrefix: "SOCKET_",
-      mutationPrefix: "SOCKET_",
-    },
+      mutationPrefix: "SOCKET_"
+    }
   })
 );
 
 new Vue({
   router,
   store,
-  render: (h) => h(App),
+  // eslint-disable-next-line
+  render: (h) => h(App)
 }).$mount("#app");

@@ -32,7 +32,7 @@ def relay_curve(curve: json, sid):
 @sio.event
 def send_curve(sid, data: json):
     logger.info('Received curve')
-    logger.info('JSON: ' + data)
+    """ logger.info('JSON: ' + data) """
     relay_curve(data, sid)
 
 
