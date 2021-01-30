@@ -69,7 +69,7 @@ export default class ReactiveChartHolder extends Vue {
   }
 
   mounted() {
-    this.sockets.subscribe("relay_curve", (data) => {
+    this.sockets.subscribe("relay_curve", data => {
       console.log(
         "JS-CLIENT: Received Curve from Server with ID " + this.$socket.id
       );

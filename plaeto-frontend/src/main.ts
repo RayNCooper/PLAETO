@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import VueSocketIO from "vue-socket.io";
+import vuetify from "./plugins/vuetify";
 
 Vue.config.productionTip = false;
 
@@ -21,6 +22,8 @@ Vue.use(
 new Vue({
   router,
   store,
+  vuetify,
+
   // eslint-disable-next-line
   render: (h) => h(App)
 }).$mount("#app");

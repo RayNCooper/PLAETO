@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <v-sheet min-height="70vh" rounded="lg">
+    <!--  -->
     <stream-panel></stream-panel>
-  </div>
+  </v-sheet>
 </template>
 
 <script lang="ts">
