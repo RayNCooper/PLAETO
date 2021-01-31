@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/Home.vue";
-import Stream from "@/views/Stream.vue";
+import Home from "../views/Content/Home.vue";
+import Stream from "@/views/Content/Stream.vue";
 
 Vue.use(VueRouter);
 

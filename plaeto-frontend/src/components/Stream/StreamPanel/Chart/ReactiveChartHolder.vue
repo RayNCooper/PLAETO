@@ -7,7 +7,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import VueSocketIO from "vue-socket.io";
 import { CurvePoint, CurveData } from "@/types/CurvePoints";
-import ReactiveChart from "@/components/stream-panel/chart/ReactiveChart.vue";
+import ReactiveChart from "@/components/Stream/StreamPanel/Chart/ReactiveChart.vue";
 
 @Component({
   components: { ReactiveChart },
@@ -69,7 +69,7 @@ export default class ReactiveChartHolder extends Vue {
   }
 
   mounted() {
-    this.sockets.subscribe("relay_curve", data => {
+    this.sockets.subscribe("relay_curve", (data) => {
       console.log(
         "JS-CLIENT: Received Curve from Server with ID " + this.$socket.id
       );
