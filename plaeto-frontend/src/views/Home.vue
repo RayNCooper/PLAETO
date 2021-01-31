@@ -28,7 +28,9 @@
                 thesis at University of Duisburg-Essen. <br />
                 Named after the greek philosopher Plato, this project builds
                 upon a frontend for energy harvesting recorder devices called
-                SOCRAETES and thus found its name.
+                SOCRAETES and thus found its name. <br />
+                SOCRAETES is a yet to be released tool that is developed by the
+                NES chair at University of Duisburg-Essen.
               </p>
               <div class="text--primary"></div>
             </v-card-text>
