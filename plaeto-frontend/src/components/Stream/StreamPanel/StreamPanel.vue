@@ -6,21 +6,45 @@
           <reactive-chart-holder></reactive-chart-holder>
         </v-card>
         <v-card-actions>
-          <v-btn color="green" class="white--text" fab>
+          <v-btn
+            :disabled="isStreaming"
+            @click="setIsStreaming(true)"
+            color="green"
+            class="white--text"
+            fab
+          >
             <v-icon dark>
               fas fa-play
             </v-icon>
           </v-btn>
-          <v-btn color="red" class="white--text" fab>
+          <v-btn
+            :disabled="!isStreaming"
+            @click="setIsStreaming(false)"
+            color="red"
+            class="white--text"
+            fab
+          >
             <v-icon dark>
               fas fa-pause
             </v-icon>
           </v-btn>
-          <v-btn color="white" class="black--text" fab>
+          <v-btn :disabled="isStreaming" fab color="white" class="black--text">
             <v-icon dark>
               fas fa-save
             </v-icon>
           </v-btn>
+          <v-btn @click="clearChart" color="red" class="white--text" fab>
+            <v-icon dark>
+              fas fa-trash
+            </v-icon>
+          </v-btn>
+          <v-spacer> </v-spacer>
+          <v-checkbox
+            v-model="shouldStack"
+            label="Stack Values"
+            color="info"
+            hide-details
+          ></v-checkbox>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -28,14 +52,33 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ReactiveChartHolder from "@/components/Stream/StreamPanel/Chart/ReactiveChartHolder.vue";
+import { mapGetters, mapMutations } from "vuex";
 
 @Component({
+  computed: mapGetters(["isStreaming"]),
+  methods: mapMutations(["setIsStreaming"]),
   components: { ReactiveChartHolder }
 })
-export default class StreamPanel extends Vue {}
+export default class StreamPanel extends Vue {
+  get shouldStack() {
+    return this.$store.getters.shouldStack;
+  }
+
+  set shouldStack(shouldStack: boolean) {
+    this.$store.commit("setShouldStack", shouldStack);
+  }
+
+  saveSheet() {
+    return;
+  }
+
+  clearChart() {
+    this.$store.commit("clearChart");
+  }
+}
 </script>
 
 <style scoped></style>

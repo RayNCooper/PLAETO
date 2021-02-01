@@ -1,6 +1,6 @@
 <template>
   <v-sparkline
-    :value="[10, 6, 5, 4, 3, 2.7, 2.3, 2, 1.9]"
+    :value="[123, 79, 54, 35, 16, 6, 0, 0]"
     :smooth="15"
     :padding="10"
     color="white"
