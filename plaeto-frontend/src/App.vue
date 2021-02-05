@@ -41,7 +41,20 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-@Component
+@Component({
+  sockets: {
+    connect() {
+      console.log("JS-CLIENT: Connected to Server with ID " + this.$socket.id);
+      this.$store.commit("setIsConnectedToSocket", true);
+    },
+    disconnect() {
+      console.log(
+        "JS-CLIENT: Disconnected from Server with ID " + this.$socket.id
+      );
+      this.$store.commit("setIsConnectedToSocket", false);
+    }
+  }
+})
 export default class App extends Vue {
   links = ["Home", "Stream"];
 }

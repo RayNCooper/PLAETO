@@ -41,7 +41,7 @@
           <v-spacer> </v-spacer>
           <v-checkbox
             v-model="shouldStack"
-            label="Stack Values"
+            label="Stack Traces"
             color="info"
             hide-details
           ></v-checkbox>

@@ -17,19 +17,7 @@ import { Trace } from "@/types/State";
     ...mapGetters({ shouldStack: "shouldStack" }),
     ...mapGetters(["isStreaming", "chart"])
   },
-  methods: mapMutations([]),
-  sockets: {
-    connect() {
-      console.log("JS-CLIENT: Connected to Server with ID " + this.$socket.id);
-      this.$store.commit("setIsConnectedToSocket", true);
-    },
-    disconnect() {
-      console.log(
-        "JS-CLIENT: Disconnected from Server with ID " + this.$socket.id
-      );
-      this.$store.commit("setIsConnectedToSocket", false);
-    }
-  }
+  methods: mapMutations([])
 })
 export default class ReactiveChartHolder extends Vue {
   @Watch("isStreaming")

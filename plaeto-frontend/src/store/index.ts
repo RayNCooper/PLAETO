@@ -17,7 +17,6 @@ export default new Vuex.Store({
       return state.isConnectedToSocket;
     },
     chart(state: AppState): Chart {
-      console.log("returned chart!");
       return state.chart;
     }
   },
