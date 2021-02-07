@@ -32,7 +32,7 @@ As soon as there are enough User Stories, various requirements can be deduced:
 
 #### ❌ Transmission of data ❌
 
-- ❌ Users need to be able to transmit their data to the remote backend
+- ✅ Users need to be able to transmit their data to the remote backend
   - This procedure is ideally performed by transmitting recorder data to the remote endpoint via an USB connection to a general computing device
     - Energy Harvester Recorder -> (USB) -> General Computing device -> (Network) -> Remote
 - ❌ The means of transmission should include the following, starting off with the most important:
@@ -59,7 +59,7 @@ As soon as there are enough User Stories, various requirements can be deduced:
   - There should be various options of charts and graphs for Users to choose from (both 2D and 3D)
 - ❌ Users should be able to compare their stored data
   - Datasets should be comparable by giving side-by-side comparisons as well as by superimposing data in one chart
-- ❌ Users should be able to observe incoming data in real-time if possible
+- ✅ Users should be able to observe incoming data in real-time if possible
   - If there is a socket connection to the project's backend, Users should be able to keep track of incoming data by receiving real-time updates relayed through the backend server
 
 #### ❌ Data analysis ❌
@@ -69,9 +69,9 @@ As soon as there are enough User Stories, various requirements can be deduced:
 
 ### Backend (Remote)
 
-#### ❌ API ❌
+#### ✅ API ✅
 
-- ❌ The backend should offer an API in order to receive energy harvesting node data
+- ✅ The backend should offer an API in order to receive energy harvesting node data
   - There should be both an API for _HTTP_ as well as for _Sockets_
 
 #### ❌ File import & export ❌
