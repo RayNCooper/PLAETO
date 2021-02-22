@@ -1,5 +1,6 @@
 <template>
   <v-snackbar
+    v-if="!inPlaybackMode"
     :timeout="-1"
     :left="true"
     :value="true"
@@ -31,7 +32,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { mapGetters } from "vuex";
 
 @Component({
-  computed: mapGetters(["isConnectedToSocket"])
+  computed: mapGetters(["isConnectedToSocket", "inPlaybackMode"])
 })
 export default class SocketStatusSnackbar extends Vue {}
 </script>

@@ -28,7 +28,13 @@
               fas fa-pause
             </v-icon>
           </v-btn>
-          <v-btn :disabled="isStreaming" fab color="white" class="black--text">
+          <v-btn
+            :disabled="isStreaming"
+            fab
+            color="white"
+            class="black--text"
+            @click="saveLocalTraceProject"
+          >
             <v-icon dark>
               fas fa-save
             </v-icon>
@@ -71,8 +77,8 @@ export default class StreamPanel extends Vue {
     this.$store.commit("setShouldStack", shouldStack);
   }
 
-  saveSheet() {
-    return;
+  saveLocalTraceProject() {
+    this.$store.dispatch("postProject", this.$store.getters.localTraceProject);
   }
 
   clearChart() {

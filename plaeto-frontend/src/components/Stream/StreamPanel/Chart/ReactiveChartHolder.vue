@@ -9,7 +9,7 @@ import VueSocketIO from "vue-socket.io";
 import { CurvePoint, CurveData } from "@/types/CurvePoints";
 import ReactiveChart from "@/components/Misc/ReactiveChart.vue";
 import { mapGetters, mapMutations } from "vuex";
-import { Trace } from "@/types/State";
+import { Trace, TraceProject } from "@/types/State";
 
 @Component({
   components: { ReactiveChart },
@@ -28,6 +28,12 @@ export default class ReactiveChartHolder extends Vue {
       this.sockets.unsubscribe("relay_curve");
     }
   }
+
+  /* @Watch("selectedTraceProject")
+  onSelectedTraceProjectChanged(val: TraceProject, oldVal: TraceProject) {
+    this.$store.commit("clearChart");
+
+  } */
 
   shouldStack!: boolean;
 

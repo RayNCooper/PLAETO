@@ -1,7 +1,7 @@
 <template>
   <div>
     <three-column-content-view>
-      <template v-slot:leftColumn> </template>
+      <template v-slot:leftColumn><traces-panel></traces-panel></template>
       <template v-slot:centerColumn>
         <stream-panel></stream-panel>
       </template>
@@ -15,12 +15,13 @@
 import ThreeColumnContentView from "@/views/Layout/ThreeColumnContentView.vue";
 import { Component, Vue } from "vue-property-decorator";
 import StreamPanel from "@/components/Stream/StreamPanel/StreamPanel.vue";
-import { mapGetters } from "vuex";
+import TracesPanel from "@/components/Stream/TracesPanel/TracesPanel.vue";
 import SocketStatusSnackbar from "@/components/Stream/SocketStatus/SocketStatusSnackbar.vue";
 
 @Component({
   components: {
     StreamPanel,
+    TracesPanel,
     ThreeColumnContentView,
     SocketStatusSnackbar
   }
