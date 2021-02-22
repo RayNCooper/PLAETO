@@ -3,13 +3,26 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from pymongo import MongoClient
 from bson import ObjectId
+from fastapi.middleware.cors import CORSMiddleware
 
 client = MongoClient('localhost', 27017, username="root", password="example")
 
 db = client.plaeto
-collection = db.traces
+collection = db.projects
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:8080",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class PyObjectId(ObjectId):
@@ -41,10 +54,26 @@ class TracePoint(BaseModel):
 class TraceData(BaseModel):
     """ equal to CurveData type in the frontend """
 
-    """ Alias created so FastAPI/pydantic can read the id variable """
-    id: Optional[PyObjectId] = Field(alias='_id')
     trace_number: int
     trace_points: List[TracePoint]
+
+
+class MetaData(BaseModel):
+    country: str
+    city: str
+    weather: str
+    lux: float
+    environment: str
+
+
+class TraceProject(BaseModel):
+    """ List of TraceData Objects """
+
+    """ Alias created so FastAPI/pydantic can read the id variable """
+    id: Optional[PyObjectId] = Field(alias='_id')
+    traces: List[TraceData]
+    title: str
+    metadata: MetaData
 
     class Config:
         """ Here we tell pydantic that we are using a custom type (MongoDB's ObjectId type) """
@@ -55,32 +84,32 @@ class TraceData(BaseModel):
         }
 
 
-@app.get("/trace")
-async def get_trace(id: str):
-    trace = collection.find_one({"_id": ObjectId(id)})
-    return {"trace": TraceData(**trace)}
+@app.get("/project")
+async def get_project(id: str):
+    project = collection.find_one({"_id": ObjectId(id)})
+    return {"project": TraceProject(**project)}
 
 
-@app.get("/traces")
-async def list_traces():
-    trace_list = []
-    for trace in collection.find():
-        trace_list.append(TraceData(**trace))
-    return {"traces": trace_list}
+@app.get("/projects")
+async def list_projects():
+    project_list = []
+    for project in collection.find():
+        project_list.append(TraceProject(**project))
+    return {"projects": project_list}
 
 
-@app.post("/trace")
-async def post_trace(trace: TraceData):
-    if hasattr(trace, 'id'):
-        delattr(trace, 'id')
-    ret = collection.insert_one(trace.dict(by_alias=True))
-    trace.id = ret.inserted_id
-    return {'posted_trace': trace}
+@app.post("/project")
+async def post_project(project: TraceProject):
+    if hasattr(project, 'id'):
+        delattr(project, 'id')
+    ret = collection.insert_one(project.dict(by_alias=True))
+    project.id = ret.inserted_id
+    return {'posted_project': project}
 
 
-@app.put("/trace")
-async def put_trace(trace: TraceData):
-    collection.replace_one({"_id": ObjectId(trace.id)},
-                           trace.dict(exclude={'id'}))
-    t = collection.find_one({"_id": ObjectId(trace.id)})
-    return {"updated_trace": TraceData(**t)}
+@app.put("/project")
+async def put_project(project: TraceProject):
+    collection.replace_one({"_id": ObjectId(project.id)},
+                           project.dict(exclude={'id'}))
+    t = collection.find_one({"_id": ObjectId(project.id)})
+    return {"updated_project": TraceProject(**t)}
