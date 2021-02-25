@@ -5,7 +5,7 @@
         <v-card class="ma-3 pa-2 blue-grey lighten-3">
           <reactive-chart-holder></reactive-chart-holder>
         </v-card>
-        <v-card-actions>
+        <v-card-actions v-if="!inPlaybackMode">
           <v-btn
             :disabled="isStreaming"
             @click="setIsStreaming(true)"
@@ -28,17 +28,6 @@
               fas fa-pause
             </v-icon>
           </v-btn>
-          <v-btn
-            :disabled="isStreaming"
-            fab
-            color="white"
-            class="black--text"
-            @click="saveLocalTraceProject"
-          >
-            <v-icon dark>
-              fas fa-save
-            </v-icon>
-          </v-btn>
           <v-btn @click="clearChart" color="red" class="white--text" fab>
             <v-icon dark>
               fas fa-trash
@@ -46,8 +35,15 @@
           </v-btn>
           <v-spacer> </v-spacer>
           <v-checkbox
+            class="mr-2"
             v-model="shouldStack"
             label="Stack Traces"
+            color="info"
+            hide-details
+          ></v-checkbox>
+          <v-checkbox
+            v-model="shouldPersist"
+            label="Persist Recording"
             color="info"
             hide-details
           ></v-checkbox>
@@ -64,8 +60,9 @@ import ReactiveChartHolder from "@/components/Stream/StreamPanel/Chart/ReactiveC
 import { mapGetters, mapMutations } from "vuex";
 
 @Component({
-  computed: mapGetters(["isStreaming"]),
+  computed: mapGetters(["isStreaming", "inPlaybackMode"]),
   methods: mapMutations(["setIsStreaming"]),
+
   components: { ReactiveChartHolder }
 })
 export default class StreamPanel extends Vue {
@@ -75,10 +72,6 @@ export default class StreamPanel extends Vue {
 
   set shouldStack(shouldStack: boolean) {
     this.$store.commit("setShouldStack", shouldStack);
-  }
-
-  saveLocalTraceProject() {
-    this.$store.dispatch("postProject", this.$store.getters.localTraceProject);
   }
 
   clearChart() {

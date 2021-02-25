@@ -13,7 +13,7 @@
               v-model="selectedTrace"
               color="primary"
               mandatory
-              @change="logIt"
+              @change="loadSelectedTrace"
             >
               <v-list-item v-for="project in projects" :key="project._id">
                 <v-list-item-content>
@@ -62,8 +62,13 @@ export default class TracesPanel extends Vue {
     return `${traceProject.title}, ${traceProject.traces.length} Trace(s)`;
   }
 
-  logIt(event: any) {
-    console.log(event);
+  loadSelectedTrace() {
+    if (this.selectedTrace !== 0) {
+      this.$store.commit(
+        "setSelectedTraceProject",
+        this.$store.getters.traceProjects[this.selectedTrace - 1]
+      );
+    } else if (this.selectedTrace == 0) this.$store.commit("clearChart");
   }
 
   async created() {

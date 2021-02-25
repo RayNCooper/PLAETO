@@ -15,7 +15,7 @@ import { Trace, TraceProject } from "@/types/State";
   components: { ReactiveChart },
   computed: {
     ...mapGetters({ shouldStack: "shouldStack" }),
-    ...mapGetters(["isStreaming", "chart"])
+    ...mapGetters(["isStreaming", "chart", "selectedTraceProject"])
   },
   methods: mapMutations([])
 })
@@ -29,11 +29,29 @@ export default class ReactiveChartHolder extends Vue {
     }
   }
 
-  /* @Watch("selectedTraceProject")
-  onSelectedTraceProjectChanged(val: TraceProject, oldVal: TraceProject) {
+  @Watch("selectedTraceProject")
+  onSelectedTraceProjectChanged(
+    val: { traces: { trace_points: any[] }[] },
+    oldVal: any
+  ) {
+    this.$store.commit("setIsStreaming", false);
     this.$store.commit("clearChart");
 
-  } */
+    const traces: Trace[] = [];
+    traces.push({ x: [], y: [] });
+
+    val.traces.forEach((t: { trace_points: any[] }) => {
+      console.log(t);
+      if (typeof t.trace_points !== "undefined") {
+        t.trace_points.forEach((p) => {
+          traces[0].x.push(p.voltage);
+          traces[0].y.push(p.micro_amperage);
+        });
+      }
+    });
+    this.$store.commit("addToChart", traces[0]);
+    console.log(val);
+  }
 
   shouldStack!: boolean;
 
@@ -65,13 +83,11 @@ export default class ReactiveChartHolder extends Vue {
     return {
       title: this.title,
       xaxis: {
-        /* range: [0, 2.7], */
         title: {
           text: "Solar Cell Voltage (V)"
         }
       },
       yaxis: {
-        /* range: [0, 400], */
         title: {
           text: "Solar Cell Current (μA)"
         }
@@ -87,8 +103,6 @@ export default class ReactiveChartHolder extends Vue {
 
       if (!this.shouldStack) {
         this.$store.commit("clearChart");
-        /* this.$set(this.$data, "x", []);
-        this.$set(this.$data, "y", []); */
       }
 
       const parsedCurves: CurveData = JSON.parse(data);
@@ -97,8 +111,7 @@ export default class ReactiveChartHolder extends Vue {
       const trace: Trace = {
         x: [],
         y: [],
-        mode: "lines+markers",
-        line: { shape: "spline", smoothing: 1.3 },
+        mode: "markers",
         type: "scatter"
       };
 

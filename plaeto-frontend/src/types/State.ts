@@ -1,25 +1,25 @@
 class AppState {
   isStreaming: boolean;
   shouldStack: boolean;
+  shouldPersist: boolean;
   isConnectedToSocket: boolean;
   chart: Chart;
   selectedTraceProject: TraceProject;
   traceProjects: TraceProject[];
-  localTraceProject: TraceProject;
   inPlaybackMode: boolean;
 
   constructor() {
     this.inPlaybackMode = false;
     this.isConnectedToSocket = false;
     this.isStreaming = false;
-    this.shouldStack = false;
+    this.shouldStack = true;
+    this.shouldPersist = false;
     this.traceProjects = [];
     this.selectedTraceProject = {
       title: "",
       traces: [],
       metadata: { country: "", city: "", weather: "", lux: 0, environment: "" }
     };
-    this.localTraceProject = this.selectedTraceProject;
     // FIXME: Remove boilerplate, incorporate into created() method of component
     this.chart = {
       uuid: "chart1",
@@ -49,6 +49,8 @@ interface TraceProject {
 interface Trace {
   x: number[];
   y: number[];
+  mode?: string;
+  type?: string;
 }
 
 interface MetaData {

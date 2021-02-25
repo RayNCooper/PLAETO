@@ -7,6 +7,9 @@ export default {
   shouldStack(state: AppState): boolean {
     return state.shouldStack;
   },
+  shouldPersist(state: AppState): boolean {
+    return state.shouldPersist;
+  },
   isConnectedToSocket(state: AppState): boolean {
     return state.isConnectedToSocket;
   },
@@ -18,9 +21,6 @@ export default {
   },
   traceProjects(state: AppState): TraceProject[] {
     return state.traceProjects;
-  },
-  localTraceProject(state: AppState): TraceProject {
-    return state.localTraceProject;
   },
   inPlaybackMode(state: AppState): boolean {
     return state.inPlaybackMode;

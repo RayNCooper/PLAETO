@@ -8,12 +8,17 @@ export default {
   setShouldStack(state: AppState, payload: boolean) {
     state.shouldStack = payload;
   },
+  setShouldPersist(state: AppState, payload: boolean) {
+    state.shouldPersist = payload;
+  },
   setIsConnectedToSocket(state: AppState, payload: boolean) {
     state.isConnectedToSocket = payload;
   },
   addToChart(state: AppState, trace: Trace) {
-    state.chart.traces.push(trace);
-    state.selectedTraceProject.traces.push(trace);
+    if (state.chart.traces[0]) {
+      state.chart.traces[0].x.push(...trace.x);
+      state.chart.traces[0].y.push(...trace.y);
+    } else state.chart.traces.push(trace);
   },
   setTraceProjects(state: AppState, traceProjects: TraceProject[]) {
     Vue.set(state, "traceProjects", traceProjects);
