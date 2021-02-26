@@ -43,6 +43,7 @@
           ></v-checkbox>
           <v-checkbox
             v-model="shouldPersist"
+            :disabled="isStreaming"
             label="Persist Recording"
             color="info"
             hide-details
@@ -72,6 +73,14 @@ export default class StreamPanel extends Vue {
 
   set shouldStack(shouldStack: boolean) {
     this.$store.commit("setShouldStack", shouldStack);
+  }
+
+  get shouldPersist() {
+    return this.$store.getters.shouldPersist;
+  }
+
+  set shouldPersist(shouldPersist: boolean) {
+    this.$store.commit("setShouldPersist", shouldPersist);
   }
 
   clearChart() {
