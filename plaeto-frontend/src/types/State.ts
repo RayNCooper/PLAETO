@@ -7,8 +7,10 @@ class AppState {
   selectedTraceProject: TraceProject;
   traceProjects: TraceProject[];
   inPlaybackMode: boolean;
+  persistedCurveId: string;
 
   constructor() {
+    this.persistedCurveId = "";
     this.inPlaybackMode = false;
     this.isConnectedToSocket = false;
     this.isStreaming = false;

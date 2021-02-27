@@ -19,6 +19,8 @@ export default {
       state.chart.traces[0].x.push(...trace.x);
       state.chart.traces[0].y.push(...trace.y);
     } else state.chart.traces.push(trace);
+    if (trace.mode) Vue.set(state.chart.traces[0], "mode", "markers");
+    if (trace.type) Vue.set(state.chart.traces[0], "type", "scatter");
   },
   setTraceProjects(state: AppState, traceProjects: TraceProject[]) {
     Vue.set(state, "traceProjects", traceProjects);
@@ -32,5 +34,8 @@ export default {
   },
   inPlaybackMode(state: AppState, inPlaybackMode: boolean) {
     state.inPlaybackMode = inPlaybackMode;
+  },
+  persistedCurveId(state: AppState, id: string) {
+    state.persistedCurveId = id;
   }
 };

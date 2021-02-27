@@ -9,3 +9,4 @@ fastapi>=0.63,<0.64
 autopep8>=1.5,<1.6
 pylint>=2.6,<2.7
 pymongo>=3.11,<3.12
+requests>=2.25,<2.26

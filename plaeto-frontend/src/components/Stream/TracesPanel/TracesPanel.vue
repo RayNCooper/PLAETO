@@ -68,7 +68,20 @@ export default class TracesPanel extends Vue {
         "setSelectedTraceProject",
         this.$store.getters.traceProjects[this.selectedTrace - 1]
       );
-    } else if (this.selectedTrace == 0) this.$store.commit("clearChart");
+    } else if (this.selectedTrace == 0) {
+      this.$store.commit("clearChart");
+      this.$store.commit("setSelectedTraceProject", {
+        title: "",
+        traces: [],
+        metadata: {
+          country: "",
+          city: "",
+          weather: "",
+          lux: 0,
+          environment: ""
+        }
+      });
+    }
   }
 
   async created() {

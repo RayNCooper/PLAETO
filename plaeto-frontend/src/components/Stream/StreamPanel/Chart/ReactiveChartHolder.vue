@@ -14,8 +14,13 @@ import { Trace, TraceProject } from "@/types/State";
 @Component({
   components: { ReactiveChart },
   computed: {
-    ...mapGetters({ shouldStack: "shouldStack" }),
-    ...mapGetters(["isStreaming", "chart", "selectedTraceProject"])
+    ...mapGetters([
+      "isStreaming",
+      "shouldStack",
+      "shouldPersist",
+      "chart",
+      "selectedTraceProject"
+    ])
   },
   methods: mapMutations([])
 })
@@ -38,7 +43,7 @@ export default class ReactiveChartHolder extends Vue {
     this.$store.commit("clearChart");
 
     const traces: Trace[] = [];
-    traces.push({ x: [], y: [] });
+    traces.push({ x: [], y: [], mode: "markers", type: "scatter" });
 
     val.traces.forEach((t: { trace_points: any[] }) => {
       console.log(t);
@@ -50,30 +55,11 @@ export default class ReactiveChartHolder extends Vue {
       }
     });
     this.$store.commit("addToChart", traces[0]);
-    console.log(val);
   }
-
-  shouldStack!: boolean;
 
   x: number[] = [];
   y: number[] = [];
   curveNumber = 0;
-
-  /* get chart() {
-    return {
-      uuid: "chart1",
-      traces: [
-        {
-          x: this.x,
-          y: this.y,
-          mode: "lines+markers",
-          line: { shape: "spline", smoothing: 1.3 },
-          type: "scatter"
-        }
-      ],
-      layout: this.plotLayout
-    };
-  } */
 
   get title() {
     return "Curves Received: " + this.curveNumber;
@@ -96,17 +82,47 @@ export default class ReactiveChartHolder extends Vue {
   }
 
   subscribeToStream() {
+    this.sockets.subscribe("set_persisted_id", (data) =>
+      this.$store.commit("persistedCurveId", data)
+    );
     this.sockets.subscribe("relay_curve", (data) => {
       console.log(
         "JS-CLIENT: Received Curve from Server with ID " + this.$socket.id
       );
 
-      if (!this.shouldStack) {
+      const parsedCurves: CurveData = JSON.parse(data);
+
+      if (!this.$store.getters.shouldStack) {
         this.$store.commit("clearChart");
       }
 
-      const parsedCurves: CurveData = JSON.parse(data);
-      console.log(parsedCurves);
+      if (this.$store.getters.shouldPersist) {
+        const d: any = {
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          trace_number: parsedCurves.curveNumber,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          trace_points: []
+        };
+        parsedCurves.curvePoints.forEach((curvePoint: CurvePoint) => {
+          d.trace_points.push({
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            sequence_number: curvePoint.sequenceNumber,
+            voltage: curvePoint.voltage,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            micro_amperage: curvePoint.microAmperage
+          });
+        });
+
+        if (this.$store.getters.persistedCurveId) {
+          this.$socket.emit(
+            "persist_curve",
+            JSON.stringify(d),
+            this.$store.getters.persistedCurveId
+          );
+        } else {
+          this.$socket.emit("persist_curve", JSON.stringify(d));
+        }
+      }
 
       const trace: Trace = {
         x: [],
@@ -122,16 +138,8 @@ export default class ReactiveChartHolder extends Vue {
 
       this.curveNumber++;
       this.$store.commit("addToChart", trace);
-      /* this.setPlotData(parsedCurves.curvePoints); */
     });
   }
-
-  /* setPlotData(curvePoints: CurvePoint[]) {
-    curvePoints.forEach((curvePoint: CurvePoint) => {
-      this.x.push(curvePoint.voltage);
-      this.y.push(curvePoint.microAmperage);
-    });
-  } */
 }
 </script>
 

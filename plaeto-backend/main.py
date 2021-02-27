@@ -113,3 +113,9 @@ async def put_project(project: TraceProject):
                            project.dict(exclude={'id'}))
     t = collection.find_one({"_id": ObjectId(project.id)})
     return {"updated_project": TraceProject(**t)}
+
+
+@app.patch("/project")
+async def append_trace(project_id: str, trace: TraceData):
+    collection.find_one_and_update({"_id": ObjectId(project_id)}, {
+                                   "$push": {'traces': trace.dict()}})

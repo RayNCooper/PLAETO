@@ -24,5 +24,8 @@ export default {
   },
   inPlaybackMode(state: AppState): boolean {
     return state.inPlaybackMode;
+  },
+  persistedCurveId(state: AppState): string {
+    return state.persistedCurveId;
   }
 };
