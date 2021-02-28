@@ -90,6 +90,11 @@ async def get_project(id: str):
     return {"project": TraceProject(**project)}
 
 
+@app.delete("/project")
+async def delete_project(id: str):
+    d = collection.delete_one({"_id": ObjectId(id)})
+
+
 @app.get("/projects")
 async def list_projects():
     project_list = []

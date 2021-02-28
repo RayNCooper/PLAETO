@@ -38,25 +38,22 @@ def send_curve(sid, data: json):
 
 
 @sio.event
-def persist_curve(sid, data: json, project_id=None):
+def persist_curve(sid, trace: json, project_id=None, metadata: json = None, title: str = None):
     """ This event is being called when a frontend wants to persist sent data."""
     if(project_id):
-        d = json.loads(data)
+        t = json.loads(trace)
         p = {'project_id': project_id}
-
-        logger.warn(json.dumps(d))
-        logger.warn(p)
 
         """ Update existing MongoDB document """
         r = requests.patch('http://localhost:8000/project',
-                           data=json.dumps(d), params=p)
+                           data=json.dumps(t), params=p)
     else:
         """ Create new MongoDB document, send back ID of newly created document """
-        d = {'traces': [json.loads(data)], 'title': 'title', 'metadata': {
-            'country': 'Germany', 'city': 'Essen', 'weather': 'Sunny', 'lux': 550, 'environment': 'Urban'}}
+        t = {'traces': [json.loads(trace)], 'title': title,
+             'metadata': json.loads(metadata)}
 
         r = requests.post("http://localhost:8000/project",
-                          data=json.dumps(d))
+                          data=json.dumps(t))
         l = json.loads(r.text)
         if(r.status_code == 200):
             set_persisted_project_id(sid, l['posted_project']['_id'])
@@ -64,7 +61,6 @@ def persist_curve(sid, data: json, project_id=None):
 
 def set_persisted_project_id(sid, project_id):
     sio.emit('set_persisted_id', project_id, to=sid)
-    logger.warn("emitted!")
 
 
 @ sio.event
