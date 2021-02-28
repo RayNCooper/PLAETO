@@ -27,5 +27,8 @@ export default {
   },
   persistedCurveId(state: AppState): string {
     return state.persistedCurveId;
+  },
+  fittedCurveExpr(state: AppState): string {
+    return state.fittedCurveExpr;
   }
 };

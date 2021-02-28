@@ -8,9 +8,11 @@ class AppState {
   traceProjects: TraceProject[];
   inPlaybackMode: boolean;
   persistedCurveId: string;
+  fittedCurveExpr: string;
 
   constructor() {
     this.persistedCurveId = "";
+    this.fittedCurveExpr = "";
     this.inPlaybackMode = false;
     this.isConnectedToSocket = false;
     this.isStreaming = false;

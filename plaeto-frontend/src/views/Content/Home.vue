@@ -1,7 +1,7 @@
 <template>
   <three-column-content-view>
     <template v-slot:leftColumn> </template>
-    <template v-slot:centerColumn>
+    <template v-slot:centerColumnTop>
       <home-panel></home-panel>
     </template>
     <template v-slot:rightColumn> </template>

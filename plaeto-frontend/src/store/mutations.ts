@@ -14,13 +14,13 @@ export default {
   setIsConnectedToSocket(state: AppState, payload: boolean) {
     state.isConnectedToSocket = payload;
   },
-  addToChart(state: AppState, trace: Trace) {
-    if (state.chart.traces[0]) {
-      state.chart.traces[0].x.push(...trace.x);
-      state.chart.traces[0].y.push(...trace.y);
-    } else state.chart.traces.push(trace);
-    if (trace.mode) Vue.set(state.chart.traces[0], "mode", "markers");
-    if (trace.type) Vue.set(state.chart.traces[0], "type", "scatter");
+  addToChart(state: AppState, payload: { trace: Trace; newCurve: boolean }) {
+    if (state.chart.traces[0] && !payload.newCurve) {
+      state.chart.traces[0].x.push(...payload.trace.x);
+      state.chart.traces[0].y.push(...payload.trace.y);
+    } else state.chart.traces.push(payload.trace);
+    if (payload.trace.mode) Vue.set(state.chart.traces[0], "mode", "markers");
+    if (payload.trace.type) Vue.set(state.chart.traces[0], "type", "scatter");
   },
   setTraceProjects(state: AppState, traceProjects: TraceProject[]) {
     Vue.set(state, "traceProjects", traceProjects);
@@ -37,5 +37,8 @@ export default {
   },
   persistedCurveId(state: AppState, id: string) {
     state.persistedCurveId = id;
+  },
+  fittedCurveExpr(state: AppState, expr: string) {
+    state.fittedCurveExpr = expr;
   }
 };

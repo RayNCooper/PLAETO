@@ -9,7 +9,10 @@
         <stream-panel></stream-panel>
       </template>
 
-      <template v-if="inPlaybackMode" v-slot:centerColumnBottom>
+      <template
+        v-if="inPlaybackMode && fittedCurveExpr"
+        v-slot:centerColumnBottom
+      >
         <math-panel></math-panel>
       </template>
 
@@ -40,7 +43,7 @@ import { mapGetters } from "vuex";
     SocketStatusSnackbar,
     MathPanel
   },
-  computed: mapGetters(["inPlaybackMode"])
+  computed: mapGetters(["inPlaybackMode", "fittedCurveExpr"])
 })
 export default class Home extends Vue {}
 </script>

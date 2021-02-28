@@ -28,7 +28,13 @@
               fas fa-pause
             </v-icon>
           </v-btn>
-          <v-btn @click="clearChart" color="red" class="white--text" fab>
+          <v-btn
+            :disabled="isStreaming"
+            @click="clearChart"
+            color="red"
+            class="white--text"
+            fab
+          >
             <v-icon dark>
               fas fa-trash
             </v-icon>

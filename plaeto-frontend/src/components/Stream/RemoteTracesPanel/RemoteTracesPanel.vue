@@ -39,7 +39,7 @@
           <v-btn fab small class="success ma-1">
             <v-icon>fas fa-file-download</v-icon>
           </v-btn>
-          <v-btn small class="success">
+          <v-btn @click="fit" small class="success">
             fit curve
           </v-btn>
           <v-btn @click="deleteProject" small class="error">
@@ -55,6 +55,8 @@
 import { Trace, TraceProject } from "@/types/State";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
+import regression from "regression";
+import { create, all } from "mathjs";
 
 @Component({
   computed: mapGetters({
@@ -67,10 +69,46 @@ import { mapGetters, mapMutations } from "vuex";
 export default class RemoteTracesPanel extends Vue {
   @Watch("selectedTrace")
   onSelectedTraceChanged(val: number, oldVal: number) {
+    this.$store.commit("fittedCurveExpr", "");
+
     if (val == 0) this.$store.commit("inPlaybackMode", false);
     else if (val > 0) this.$store.commit("inPlaybackMode", true);
   }
   selectedTrace = 0;
+
+  fit() {
+    if (!this.$store.getters.fittedCurveExpr) {
+      const math: any = create(all, {});
+
+      let maxV = 0;
+
+      const d: any = [];
+      const traces = this.$store.getters.selectedTraceProject.traces;
+      traces.forEach((t: any) => {
+        t.trace_points.forEach((p: any) => {
+          if (p.voltage > maxV) maxV = p.voltage;
+          d.push([p.voltage, p.micro_amperage]);
+        });
+      });
+      const result = regression.polynomial(d, { order: 3 });
+      const expr = math.compile(result.string);
+
+      this.$store.commit("fittedCurveExpr", result.string);
+
+      const xValues = math.range(0, maxV, 0.1).toArray();
+      const yValues = xValues.map(function(x: any) {
+        return expr.evaluate({ x: x });
+      });
+
+      const trace = {
+        x: xValues,
+        y: yValues,
+        type: "scatter"
+      };
+
+      this.$store.commit({ type: "addToChart", trace: trace, newCurve: true });
+    }
+  }
 
   deleteProject() {
     const d = this.$store.dispatch(

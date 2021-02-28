@@ -53,7 +53,11 @@ export default class ReactiveChartHolder extends Vue {
         });
       }
     });
-    this.$store.commit("addToChart", traces[0]);
+    this.$store.commit({
+      type: "addToChart",
+      trace: traces[0],
+      newCurve: false
+    });
   }
 
   x: number[] = [];
@@ -142,7 +146,7 @@ export default class ReactiveChartHolder extends Vue {
       });
 
       this.curveNumber++;
-      this.$store.commit("addToChart", trace);
+      this.$store.commit({ type: "addToChart", trace: trace, newCurve: false });
     });
   }
 }
