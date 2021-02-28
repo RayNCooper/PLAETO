@@ -8,7 +8,7 @@
         <v-card-actions v-if="!inPlaybackMode">
           <v-btn
             :disabled="isStreaming"
-            @click="setIsStreaming(true)"
+            @click="play"
             color="green"
             class="white--text"
             fab
@@ -19,7 +19,7 @@
           </v-btn>
           <v-btn
             :disabled="!isStreaming"
-            @click="setIsStreaming(false)"
+            @click="pause"
             color="red"
             class="white--text"
             fab
@@ -32,6 +32,9 @@
             <v-icon dark>
               fas fa-trash
             </v-icon>
+          </v-btn>
+          <v-btn fab class="success" :disabled="isStreaming">
+            <v-icon dark>fas fa-file-upload</v-icon>
           </v-btn>
           <v-spacer> </v-spacer>
           <v-checkbox
@@ -62,11 +65,29 @@ import { mapGetters, mapMutations } from "vuex";
 
 @Component({
   computed: mapGetters(["isStreaming", "inPlaybackMode"]),
-  methods: mapMutations(["setIsStreaming"]),
+  methods: mapMutations(["clearChart"]),
 
   components: { ReactiveChartHolder }
 })
 export default class StreamPanel extends Vue {
+  play() {
+    this.$store.commit("persistedCurveId", "");
+    this.$store.commit("setIsStreaming", true);
+  }
+
+  pause() {
+    if (this.$store.getters.shouldPersist) {
+      const response = this.$store.dispatch("getProjects");
+      response.then(
+        (r) => {
+          this.$store.commit("setTraceProjects", r.data.projects);
+        },
+        (e) => console.log(e)
+      );
+    }
+    this.$store.commit("setIsStreaming", false);
+  }
+
   get shouldStack() {
     return this.$store.getters.shouldStack;
   }
@@ -81,10 +102,6 @@ export default class StreamPanel extends Vue {
 
   set shouldPersist(shouldPersist: boolean) {
     this.$store.commit("setShouldPersist", shouldPersist);
-  }
-
-  clearChart() {
-    this.$store.commit("clearChart");
   }
 }
 </script>

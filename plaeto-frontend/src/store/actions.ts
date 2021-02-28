@@ -14,5 +14,13 @@ export default {
     traceProject: TraceProject
   ): Promise<AxiosResponse<any>> {
     return Vue.axios.post("http://localhost:8000/project", traceProject);
+  },
+  deleteProject(
+    context: ActionContext<AppState, AppState>,
+    traceProject: TraceProject
+  ): Promise<AxiosResponse<any>> {
+    return Vue.axios.delete("http://localhost:8000/project", {
+      params: { id: traceProject._id }
+    });
   }
 };

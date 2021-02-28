@@ -46,7 +46,6 @@ export default class ReactiveChartHolder extends Vue {
     traces.push({ x: [], y: [], mode: "markers", type: "scatter" });
 
     val.traces.forEach((t: { trace_points: any[] }) => {
-      console.log(t);
       if (typeof t.trace_points !== "undefined") {
         t.trace_points.forEach((p) => {
           traces[0].x.push(p.voltage);
@@ -113,14 +112,20 @@ export default class ReactiveChartHolder extends Vue {
           });
         });
 
-        if (this.$store.getters.persistedCurveId) {
+        if (this.$store.getters.persistedCurveId !== "") {
           this.$socket.emit(
             "persist_curve",
             JSON.stringify(d),
             this.$store.getters.persistedCurveId
           );
         } else {
-          this.$socket.emit("persist_curve", JSON.stringify(d));
+          this.$socket.emit(
+            "persist_curve",
+            JSON.stringify(d),
+            null,
+            JSON.stringify(this.$store.getters.selectedTraceProject.metadata),
+            this.$store.getters.selectedTraceProject.title
+          );
         }
       }
 

@@ -35,28 +35,60 @@
             </v-list-item-group>
           </v-list>
         </v-card>
+        <v-card-actions v-if="inPlaybackMode">
+          <v-btn fab small class="success ma-1">
+            <v-icon>fas fa-file-download</v-icon>
+          </v-btn>
+          <v-btn small class="success">
+            fit curve
+          </v-btn>
+          <v-btn @click="deleteProject" small class="error">
+            delete
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { TraceProject } from "@/types/State";
+import { Trace, TraceProject } from "@/types/State";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 
 @Component({
-  computed: mapGetters({ projects: "traceProjects" }),
+  computed: mapGetters({
+    projects: "traceProjects",
+    inPlaybackMode: "inPlaybackMode"
+  }),
   methods: mapMutations([]),
   components: {}
 })
-export default class TracesPanel extends Vue {
+export default class RemoteTracesPanel extends Vue {
   @Watch("selectedTrace")
   onSelectedTraceChanged(val: number, oldVal: number) {
     if (val == 0) this.$store.commit("inPlaybackMode", false);
     else if (val > 0) this.$store.commit("inPlaybackMode", true);
   }
   selectedTrace = 0;
+
+  deleteProject() {
+    const d = this.$store.dispatch(
+      "deleteProject",
+      this.$store.getters.selectedTraceProject
+    );
+    d.then(
+      (r) => {
+        const t: TraceProject[] = this.$store.getters.traceProjects;
+        const p = t.filter((val: TraceProject) => {
+          return val._id !== r.config.params.id;
+        });
+        console.log(p);
+        this.$store.commit("setTraceProjects", p);
+      },
+      (e) => console.log(e)
+    );
+  }
 
   listItemText(traceProject: TraceProject) {
     return `${traceProject.title}, ${traceProject.traces.length} Trace(s)`;
@@ -88,7 +120,6 @@ export default class TracesPanel extends Vue {
     try {
       const response = await this.$store.dispatch("getProjects");
       this.$store.commit("setTraceProjects", response.data.projects);
-      console.log(this.$store.getters.traceProjects);
     } catch (error) {
       console.error(error);
     }
