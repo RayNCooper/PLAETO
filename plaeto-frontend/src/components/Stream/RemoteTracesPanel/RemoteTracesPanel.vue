@@ -70,6 +70,10 @@ export default class RemoteTracesPanel extends Vue {
   @Watch("selectedTrace")
   onSelectedTraceChanged(val: number, oldVal: number) {
     this.$store.commit("fittedCurveExpr", "");
+    this.$store.commit(
+      "chartTitle",
+      this.$store.getters.selectedTraceProject.title
+    );
 
     if (val == 0) this.$store.commit("inPlaybackMode", false);
     else if (val > 0) this.$store.commit("inPlaybackMode", true);
@@ -87,7 +91,7 @@ export default class RemoteTracesPanel extends Vue {
       traces.forEach((t: any) => {
         t.trace_points.forEach((p: any) => {
           if (p.voltage > maxV) maxV = p.voltage;
-          d.push([p.voltage, p.micro_amperage]);
+          if (p.micro_amperage > 0) d.push([p.voltage, p.micro_amperage]);
         });
       });
       const result = regression.polynomial(d, { order: 3 });
@@ -95,7 +99,7 @@ export default class RemoteTracesPanel extends Vue {
 
       this.$store.commit("fittedCurveExpr", result.string);
 
-      const xValues = math.range(0, maxV, 0.1).toArray();
+      const xValues = math.range(0, maxV, 0.05).toArray();
       const yValues = xValues.map(function(x: any) {
         return expr.evaluate({ x: x });
       });

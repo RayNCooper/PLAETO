@@ -14,7 +14,7 @@ export default class ReactiveChart extends Vue {
   mounted() {
     Plotly.newPlot(this.chart.uuid, this.chart.traces, this.chart.layout, {
       responsive: true,
-      staticPlot: true
+      staticPlot: false
     });
   }
 

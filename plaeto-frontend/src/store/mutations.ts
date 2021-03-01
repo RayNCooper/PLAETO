@@ -40,5 +40,8 @@ export default {
   },
   fittedCurveExpr(state: AppState, expr: string) {
     state.fittedCurveExpr = expr;
+  },
+  chartTitle(state: AppState, title: string) {
+    state.chart.layout.title = title;
   }
 };

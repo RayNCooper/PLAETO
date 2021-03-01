@@ -24,7 +24,6 @@ class AppState {
       traces: [],
       metadata: { country: "", city: "", weather: "", lux: 0, environment: "" }
     };
-    // FIXME: Remove boilerplate, incorporate into created() method of component
     this.chart = {
       uuid: "chart1",
       traces: [],
