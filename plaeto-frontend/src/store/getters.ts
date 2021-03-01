@@ -1,4 +1,4 @@
-import { AppState, Chart, Trace, TraceProject } from "@/types/State";
+import { AppState, Chart, ChartMode, Trace, TraceProject } from "@/types/State";
 
 export default {
   isStreaming(state: AppState): boolean {
@@ -28,7 +28,13 @@ export default {
   persistedCurveId(state: AppState): string {
     return state.persistedCurveId;
   },
-  fittedCurveExpr(state: AppState): string {
-    return state.fittedCurveExpr;
+  displayCurves(state: AppState): boolean {
+    return state.displayCurves;
+  },
+  displayPoints(state: AppState): boolean {
+    return state.displayPoints;
+  },
+  chartMode(state: AppState): ChartMode {
+    return state.chartMode;
   }
 };
