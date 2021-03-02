@@ -38,7 +38,7 @@ class AppState {
       traces: [],
       layout: {
         title: "",
-        height: 650,
+        height: 530,
         xaxis: { title: { text: "Solar Cell Voltage (V)" } },
         yaxis: { title: { text: "Solar Cell Current (μA)" } }
       }

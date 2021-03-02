@@ -26,7 +26,7 @@ export default class ReactiveChart extends Vue {
       const c: Chart = {
         uuid: "chart1",
         layout: {
-          height: 650,
+          height: 530,
           title: this.$store.getters.selectedTraceProject.title,
           xaxis: { title: { text: "Solar Cell Voltage (V)" } },
           yaxis: { title: { text: "Solar Cell Current (μA)" } }
@@ -62,7 +62,7 @@ export default class ReactiveChart extends Vue {
       const c: Chart = {
         uuid: "chart1",
         layout: {
-          height: 650,
+          height: 530,
           title: this.$store.getters.selectedTraceProject.title
         },
         traces: []
@@ -124,11 +124,11 @@ export default class ReactiveChart extends Vue {
         title: this.$store.getters.selectedTraceProject.title,
         showlegend: false,
         autosize: true,
-        height: 650,
+        height: 530,
         scene: {
-          xaxis: { title: "Time in s" },
-          yaxis: { title: "Solar Voltage in V" },
-          zaxis: { title: "Solar Current in µA" }
+          xaxis: { title: "Time (s)" },
+          yaxis: { title: "Solar Cell Voltage (V)" },
+          zaxis: { title: "Solar Cell Current (µA)" }
         }
       });
     }
