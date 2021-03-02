@@ -30,15 +30,15 @@ As soon as there are enough User Stories, various requirements can be deduced:
 
 ### On-device (energy harvester recorder used, built on SOCRAETES)
 
-#### ❌ Transmission of data ❌
+#### ✅ Transmission of data ✅
 
 - ✅ Users need to be able to transmit their data to the remote backend
   - This procedure is ideally performed by transmitting recorder data to the remote endpoint via an USB connection to a general computing device
     - Energy Harvester Recorder -> (USB) -> General Computing device -> (Network) -> Remote
-- ❌ The means of transmission should include the following, starting off with the most important:
+- ✅ The means of transmission should include the following, starting off with the most important:
   1. via _Socket_ (Realtime - **JSON** format)
   2. via _HTTP_ (Fallback for Socket Connection, Locally Recorded Trace imported - **HDF5** format)
-- ❌ If one kind of transmission fails, the other should be tried in order to guarantee reception of data
+- ✅ If one kind of transmission fails, the other should be tried in order to guarantee reception of data
   - If there is no Internet connection available to the transmitting device, the program should log a _warning_ and save all recorded data to a file
 
 #### ❌ Data format, Metadata ❌
@@ -49,22 +49,22 @@ As soon as there are enough User Stories, various requirements can be deduced:
       - On file import (upload), data is parsed for persistence from **HDF5** to **JSON** 
       - On file export (download), data is parsed from persisted **JSON** to **HDF5**
       - **CAUTION:** How does the system handle large datasets (>=1GB)?
-- ❌ Users should be able to add metadata such as temperature or time of day to their data in order to enable categorization
+- ✅ Users should be able to add metadata such as temperature or time of day to their data in order to enable categorization
 
 ### In the browser (WebApp, Frontend)
 
 #### ❌ Visualization of Data ❌
 
-- ❌ Users should be able to visualize their stored data
+- ✅ Users should be able to visualize their stored data
   - There should be various options of charts and graphs for Users to choose from (both 2D and 3D)
 - ❌ Users should be able to compare their stored data
   - Datasets should be comparable by giving side-by-side comparisons as well as by superimposing data in one chart
 - ✅ Users should be able to observe incoming data in real-time if possible
   - If there is a socket connection to the project's backend, Users should be able to keep track of incoming data by receiving real-time updates relayed through the backend server
 
-#### ❌ Data analysis ❌
+#### ✅ Data analysis ✅
 
-- ❌ Users should be able to analyze their stored data
+- ✅ Users should be able to analyze their stored data
   - To give Users a chance to coarsely analyze their data, there should be several options for treating displayed data (e.g. interpolation)
 
 ### Backend (Remote)
