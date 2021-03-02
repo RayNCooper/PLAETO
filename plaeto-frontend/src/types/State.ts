@@ -1,3 +1,8 @@
+enum ChartMode {
+  TwoDimensional = "TWODIMENSIONAL",
+  ThreeDimensional = "THREEDIMENSIONAL"
+}
+
 class AppState {
   isStreaming: boolean;
   shouldStack: boolean;
@@ -8,11 +13,15 @@ class AppState {
   traceProjects: TraceProject[];
   inPlaybackMode: boolean;
   persistedCurveId: string;
-  fittedCurveExpr: string;
+  displayPoints: boolean;
+  displayCurves: boolean;
+  chartMode: ChartMode;
 
   constructor() {
+    this.chartMode = ChartMode.TwoDimensional;
+    this.displayCurves = false;
+    this.displayPoints = true;
     this.persistedCurveId = "";
-    this.fittedCurveExpr = "";
     this.inPlaybackMode = false;
     this.isConnectedToSocket = false;
     this.isStreaming = false;
@@ -29,6 +38,7 @@ class AppState {
       traces: [],
       layout: {
         title: "",
+        height: 530,
         xaxis: { title: { text: "Solar Cell Voltage (V)" } },
         yaxis: { title: { text: "Solar Cell Current (μA)" } }
       }
@@ -66,16 +76,22 @@ interface MetaData {
 
 interface Layout {
   title: string;
-  xaxis: {
+  xaxis?: {
     title: {
       text: string;
     };
   };
-  yaxis: {
+  yaxis?: {
     title: {
       text: string;
     };
   };
+  zaxis?: {
+    title: {
+      text: string;
+    };
+  };
+  height?: number;
 }
 
-export { AppState, Chart, Trace, Layout, TraceProject, MetaData };
+export { AppState, Chart, Trace, Layout, TraceProject, MetaData, ChartMode };

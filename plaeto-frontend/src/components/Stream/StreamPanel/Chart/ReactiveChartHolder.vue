@@ -9,7 +9,7 @@ import VueSocketIO from "vue-socket.io";
 import { CurvePoint, CurveData } from "@/types/CurvePoints";
 import ReactiveChart from "@/components/Misc/ReactiveChart.vue";
 import { mapGetters, mapMutations } from "vuex";
-import { Trace, TraceProject } from "@/types/State";
+import { Chart, ChartMode, Trace, TraceProject } from "@/types/State";
 
 @Component({
   components: { ReactiveChart },
@@ -43,20 +43,21 @@ export default class ReactiveChartHolder extends Vue {
     this.$store.commit("clearChart");
 
     const traces: Trace[] = [];
-    traces.push({ x: [], y: [], mode: "markers", type: "scatter" });
 
     val.traces.forEach((t: { trace_points: any[] }) => {
       if (typeof t.trace_points !== "undefined") {
+        const x: any[] = [];
+        const y: any[] = [];
         t.trace_points.forEach((p) => {
-          traces[0].x.push(p.voltage);
-          traces[0].y.push(p.micro_amperage);
+          x.push(p.voltage);
+          y.push(p.micro_amperage);
         });
+        traces.push({ x: x, y: y, mode: "markers", type: "scatter" });
       }
     });
     this.$store.commit({
-      type: "addToChart",
-      trace: traces[0],
-      newCurve: false
+      type: "addToChartMultiple",
+      traces: traces
     });
   }
 
@@ -146,7 +147,7 @@ export default class ReactiveChartHolder extends Vue {
       });
 
       this.curveNumber++;
-      this.$store.commit({ type: "addToChart", trace: trace, newCurve: false });
+      this.$store.commit({ type: "addToChartSingle", trace: trace });
     });
   }
 }

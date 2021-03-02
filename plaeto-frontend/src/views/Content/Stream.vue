@@ -9,11 +9,8 @@
         <stream-panel></stream-panel>
       </template>
 
-      <template
-        v-if="inPlaybackMode && fittedCurveExpr"
-        v-slot:centerColumnBottom
-      >
-        <math-panel></math-panel>
+      <template v-if="inPlaybackMode" v-slot:centerColumnBottom>
+        <thresholds-panel></thresholds-panel>
       </template>
 
       <template v-slot:rightColumn>
@@ -30,7 +27,7 @@ import { Component, Vue } from "vue-property-decorator";
 import StreamPanel from "@/components/Stream/StreamPanel/StreamPanel.vue";
 import RemoteTracesPanel from "@/components/Stream/RemoteTracesPanel/RemoteTracesPanel.vue";
 import MetadataPanel from "@/components/Stream/MetadataPanel/MetadataPanel.vue";
-import MathPanel from "@/components/Stream/MathPanel/MathPanel.vue";
+import ThresholdsPanel from "@/components/Stream/TresholdsPanel/ThresholdsPanel.vue";
 import SocketStatusSnackbar from "@/components/Stream/SocketStatus/SocketStatusSnackbar.vue";
 import { mapGetters } from "vuex";
 
@@ -41,9 +38,9 @@ import { mapGetters } from "vuex";
     MetadataPanel,
     ThreeColumnContentView,
     SocketStatusSnackbar,
-    MathPanel
+    ThresholdsPanel
   },
-  computed: mapGetters(["inPlaybackMode", "fittedCurveExpr"])
+  computed: mapGetters(["inPlaybackMode"])
 })
 export default class Home extends Vue {}
 </script>

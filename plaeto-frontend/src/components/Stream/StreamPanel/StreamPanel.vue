@@ -39,9 +39,6 @@
               fas fa-trash
             </v-icon>
           </v-btn>
-          <v-btn fab class="success" :disabled="isStreaming">
-            <v-icon dark>fas fa-file-upload</v-icon>
-          </v-btn>
           <v-spacer> </v-spacer>
           <v-checkbox
             class="mr-2"

@@ -34,29 +34,51 @@
               </v-list-item>
             </v-list-item-group>
           </v-list>
+          <v-card-actions v-if="inPlaybackMode">
+            <v-btn @click="deleteProject" small class="error mt-2">
+              delete trace project
+            </v-btn>
+          </v-card-actions>
         </v-card>
-        <v-card-actions v-if="inPlaybackMode">
-          <v-btn fab small class="success ma-1">
-            <v-icon>fas fa-file-download</v-icon>
-          </v-btn>
-          <v-btn @click="fit" small class="success">
-            fit curve
-          </v-btn>
-          <v-btn @click="deleteProject" small class="error">
-            delete
-          </v-btn>
-        </v-card-actions>
+
+        <v-card class="ma-3 pa-2 blue-grey lighten-3" v-if="inPlaybackMode">
+          <v-card-title class="white--text">Display Options</v-card-title>
+
+          <v-container class="white">
+            <div class="text-subtitle-2">Data Display</div>
+            <v-checkbox
+              v-model="displayPoints"
+              label="Display Data Points"
+              color="info"
+              hide-details
+              :disabled="disableCheckboxes"
+            ></v-checkbox>
+            <v-checkbox
+              v-model="displayCurves"
+              label="Display Fitted Curves"
+              color="info"
+              hide-details
+              :disabled="disableCheckboxes"
+            ></v-checkbox>
+
+            <div class="text-subtitle-2 mt-5">Chart Type</div>
+            <v-radio-group mandatory v-model="selectedChartMode">
+              <v-radio label="2D"></v-radio>
+              <v-radio label="3D"></v-radio>
+            </v-radio-group>
+          </v-container>
+        </v-card>
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { Trace, TraceProject } from "@/types/State";
+import { Chart, ChartMode, Trace, TraceProject } from "@/types/State";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { mapGetters, mapMutations } from "vuex";
 import regression from "regression";
-import { create, all } from "mathjs";
+import { create, all, trace } from "mathjs";
 
 @Component({
   computed: mapGetters({
@@ -68,49 +90,152 @@ import { create, all } from "mathjs";
 })
 export default class RemoteTracesPanel extends Vue {
   @Watch("selectedTrace")
-  onSelectedTraceChanged(val: number, oldVal: number) {
-    this.$store.commit("fittedCurveExpr", "");
+  onSelectedTraceChanged(val: number) {
     this.$store.commit(
       "chartTitle",
       this.$store.getters.selectedTraceProject.title
     );
 
+    /* Reset all Inputs when selecting a Trace Project to load */
+    this.$store.commit("displayPoints", true);
+    this.$store.commit("displayCurves", false);
+    this.$store.commit("chartMode", ChartMode.TwoDimensional);
+    this.selectedChartMode = 0;
+
     if (val == 0) this.$store.commit("inPlaybackMode", false);
     else if (val > 0) this.$store.commit("inPlaybackMode", true);
   }
-  selectedTrace = 0;
 
-  fit() {
-    if (!this.$store.getters.fittedCurveExpr) {
+  @Watch("selectedChartMode")
+  onSelectedChartModeChanged(val: number) {
+    this.$store.commit("displayPoints", true);
+    this.$store.commit("displayCurves", false);
+
+    if (val == 1) this.$store.commit("chartMode", ChartMode.ThreeDimensional);
+    else if (val == 0)
+      this.$store.commit("chartMode", ChartMode.TwoDimensional);
+  }
+
+  selectedTrace = 0;
+  selectedChartMode = 0;
+
+  get disableCheckboxes() {
+    if (this.$store.getters.chartMode == ChartMode.ThreeDimensional)
+      return true;
+    return false;
+  }
+
+  get displayPoints() {
+    return this.$store.getters.displayPoints;
+  }
+
+  set displayPoints(displayPoints: boolean) {
+    this.$store.commit("displayPoints", displayPoints);
+
+    if (displayPoints) {
+      /* Add Points to Chart */
+      const selectedTraceProject = this.$store.getters.selectedTraceProject;
+
+      const traces: Trace[] = [];
+
+      selectedTraceProject.traces.forEach((t: { trace_points: any[] }) => {
+        if (typeof t.trace_points !== "undefined") {
+          const x: any[] = [];
+          const y: any[] = [];
+          t.trace_points.forEach((p) => {
+            x.push(p.voltage);
+            y.push(p.micro_amperage);
+          });
+          traces.push({ x: x, y: y, mode: "markers", type: "scatter" });
+        }
+      });
+      this.$store.commit({
+        type: "addToChartMultiple",
+        traces: traces
+      });
+    } else {
+      /* Remove Points from Chart */
+      const c: Chart = {
+        uuid: "",
+        layout: {
+          title: "",
+          xaxis: { title: { text: "" } },
+          yaxis: { title: { text: "" } }
+        },
+        traces: []
+      };
+
+      Object.assign(c, this.$store.getters.chart);
+
+      const traces = c.traces.filter((trace) => {
+        return trace.mode !== "markers";
+      });
+
+      Vue.set(c, "traces", traces);
+      this.$store.commit("setChart", c);
+    }
+  }
+
+  get displayCurves() {
+    return this.$store.getters.displayCurves;
+  }
+
+  set displayCurves(displayCurves: boolean) {
+    this.$store.commit("displayCurves", displayCurves);
+
+    if (displayCurves) {
+      /* Add fitted curves to chart */
       const math: any = create(all, {});
+
+      const selectedTraceProject = this.$store.getters.selectedTraceProject;
+      const traces: Trace[] = [];
 
       let maxV = 0;
 
-      const d: any = [];
-      const traces = this.$store.getters.selectedTraceProject.traces;
-      traces.forEach((t: any) => {
+      selectedTraceProject.traces.forEach((t: any) => {
+        const d: any = [];
+
         t.trace_points.forEach((p: any) => {
           if (p.voltage > maxV) maxV = p.voltage;
           if (p.micro_amperage > 0) d.push([p.voltage, p.micro_amperage]);
         });
+
+        const result = regression.polynomial(d, { order: 3 });
+        const expr = math.compile(result.string);
+
+        const xValues = math.range(0, maxV, maxV / 20).toArray();
+        const yValues = xValues.map(function(x: any) {
+          return expr.evaluate({ x: x });
+        });
+
+        traces.push({ x: xValues, y: yValues, type: "scatter", mode: "lines" });
       });
-      const result = regression.polynomial(d, { order: 3 });
-      const expr = math.compile(result.string);
 
-      this.$store.commit("fittedCurveExpr", result.string);
-
-      const xValues = math.range(0, maxV, 0.05).toArray();
-      const yValues = xValues.map(function(x: any) {
-        return expr.evaluate({ x: x });
+      this.$store.commit({
+        type: "addToChartMultiple",
+        traces: traces,
+        newCurve: true
       });
-
-      const trace = {
-        x: xValues,
-        y: yValues,
-        type: "scatter"
+    } else {
+      /* Remove curves from chart */
+      const c: Chart = {
+        uuid: "",
+        layout: {
+          title: "",
+          xaxis: { title: { text: "" } },
+          yaxis: { title: { text: "" } }
+        },
+        traces: []
       };
 
-      this.$store.commit({ type: "addToChart", trace: trace, newCurve: true });
+      Object.assign(c, this.$store.getters.chart);
+
+      const traces = c.traces.filter((trace) => {
+        return trace.mode !== "lines";
+      });
+
+      Vue.set(c, "traces", traces);
+      this.$store.commit("setChart", c);
     }
   }
 
