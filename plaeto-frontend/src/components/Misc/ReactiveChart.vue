@@ -68,10 +68,10 @@ export default class ReactiveChart extends Vue {
         traces: []
       };
 
-      /*  const math: any = create(all, {}); */
+      const math: any = create(all, {});
 
       const traces: any[] = [];
-      /* let maxV = 0; */
+      let maxV = 0;
 
       this.$store.getters.selectedTraceProject.traces.forEach(
         (t: any, i: number) => {
@@ -79,7 +79,7 @@ export default class ReactiveChart extends Vue {
           const y: any[] = [];
           const z: any[] = [];
 
-          /* const d: any = [];
+          const d: any = [];
 
           t.trace_points.forEach((p: any) => {
             if (p.voltage > maxV) maxV = p.voltage;
@@ -89,16 +89,23 @@ export default class ReactiveChart extends Vue {
           const result = regression.polynomial(d, { order: 3 });
           const expr = math.compile(result.string);
 
-          const yValues = math.range(0, maxV, maxV / 20).toArray();
+          const yValues = math.range(0, maxV, maxV / 39).toArray();
           const zValues = yValues.map(function(x: any) {
             return expr.evaluate({ x: x });
-          }); */
+          });
 
           t.trace_points.forEach((p: any) => {
             x.push([i, i + 1]);
-            y.push([p.voltage, p.voltage]);
-            z.push([p.micro_amperage, p.micro_amperage]);
           });
+
+          zValues.forEach((val: any) => {
+            z.push([val, val]);
+          });
+
+          yValues.forEach((val: any) => {
+            y.push([val, val]);
+          });
+
           traces.push({
             type: "surface",
             x: x,
