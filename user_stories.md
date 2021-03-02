@@ -53,12 +53,12 @@ As soon as there are enough User Stories, various requirements can be deduced:
 
 ### In the browser (WebApp, Frontend)
 
-#### ❌ Visualization of Data ❌
+#### ✅ Visualization of Data ✅
 
 - ✅ Users should be able to visualize their stored data
   - There should be various options of charts and graphs for Users to choose from (both 2D and 3D)
-- ❌ Users should be able to compare their stored data
-  - Datasets should be comparable by giving side-by-side comparisons as well as by superimposing data in one chart
+- ✅ Users should be able to compare their stored data
+  - Datasets should be comparable by giving side-by-side comparisons as well as by superimposing data in one chart (final implementation: threshold, side-by-side & superimposing skipped because of time constraints)
 - ✅ Users should be able to observe incoming data in real-time if possible
   - If there is a socket connection to the project's backend, Users should be able to keep track of incoming data by receiving real-time updates relayed through the backend server
 
