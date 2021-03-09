@@ -151,7 +151,17 @@ export default class ReactiveChart extends Vue {
       Plotly.relayout(this.chart.uuid, this.chart.layout);
     } else if (this.$store.getters.chartMode == ChartMode.ThreeDimensional) {
       Plotly.react(this.chart.uuid, this.chart.traces);
-      Plotly.relayout(this.chart.uuid, this.chart.layout);
+      Plotly.relayout(this.chart.uuid, {
+        title: this.$store.getters.selectedTraceProject.title,
+        showlegend: false,
+        autosize: true,
+        height: 530,
+        scene: {
+          xaxis: { title: "Time (s)" },
+          yaxis: { title: "Solar Cell Voltage (V)" },
+          zaxis: { title: "Solar Cell Current (µA)" }
+        }
+      });
     }
   }
 }
