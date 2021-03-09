@@ -115,7 +115,6 @@ export default class ReactiveChart extends Vue {
           });
         }
       );
-      console.log(traces);
 
       c.traces = traces;
       this.$store.commit("setChart", c);
@@ -151,7 +150,8 @@ export default class ReactiveChart extends Vue {
       Plotly.react(this.chart.uuid, this.chart.traces);
       Plotly.relayout(this.chart.uuid, this.chart.layout);
     } else if (this.$store.getters.chartMode == ChartMode.ThreeDimensional) {
-      /*  */
+      Plotly.react(this.chart.uuid, this.chart.traces);
+      Plotly.relayout(this.chart.uuid, this.chart.layout);
     }
   }
 }
