@@ -83,7 +83,7 @@ export default class ReactiveChart extends Vue {
 
           t.trace_points.forEach((p: any) => {
             if (p.voltage > maxV) maxV = p.voltage;
-            if (p.micro_amperage > 0) d.push([p.voltage, p.micro_amperage]);
+            d.push([p.voltage, p.micro_amperage]);
           });
 
           const result = regression.polynomial(d, { order: 3 });

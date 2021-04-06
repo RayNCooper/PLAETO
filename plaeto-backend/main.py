@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 from fastapi.middleware.cors import CORSMiddleware
 
-client = MongoClient('localhost', 27017, username="root", password="example")
+client = MongoClient('mongo', 27017, username="root", password="example")
 
 db = client.plaeto
 collection = db.projects

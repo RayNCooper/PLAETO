@@ -10,6 +10,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    volumes: 
+      - /data/db
 
   mongo-express:
     image: mongo-express:0.54
@@ -19,3 +21,25 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
+
+  rest-api:
+    build:
+      context: ./plaeto-backend
+      dockerfile: Dockerfile-rest-api
+    image: plaeto-rest-api
+    ports: 
+      - 8000:8000
+
+  socket-server:
+    build:
+      context: ./plaeto-backend
+      dockerfile: Dockerfile-socket-server
+    image: plaeto-socket-server
+    ports:
+      - 5000:5000
+
+  web-client:
+    build: ./plaeto-frontend
+    image: plaeto-web-client
+    ports:
+      - 8080:8080

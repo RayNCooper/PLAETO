@@ -197,16 +197,17 @@ export default class RemoteTracesPanel extends Vue {
 
         t.trace_points.forEach((p: any) => {
           if (p.voltage > maxV) maxV = p.voltage;
-          if (p.micro_amperage > 0) d.push([p.voltage, p.micro_amperage]);
+          if (p.voltage > 0) d.push([p.voltage, p.micro_amperage]);
         });
 
         const result = regression.polynomial(d, { order: 3 });
         const expr = math.compile(result.string);
 
-        const xValues = math.range(0, maxV, maxV / 20).toArray();
+        const xValues = math.range(0, maxV, maxV / 39).toArray();
         const yValues = xValues.map(function(x: any) {
           return expr.evaluate({ x: x });
         });
+        console.log({ x: xValues, y: yValues });
 
         traces.push({ x: xValues, y: yValues, type: "scatter", mode: "lines" });
       });
