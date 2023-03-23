@@ -1,5 +1,5 @@
 # PLAETO
-![PLAETO web client](https://git.reinkober.it/crunch/PLAETO/raw/branch/master/plaeto.png)
+![PLAETO web client](https://github.com/RayNCooper/PLAETO/blob/master/plaeto.png?raw=true)
 ## Preface
 Since this project was developed in the context of a past bachelor thesis, it will not be developed any further. Feel free to fork and ask questions. 
 
